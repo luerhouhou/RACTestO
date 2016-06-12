@@ -10,6 +10,9 @@
 
 @interface ViewController : UIViewController
 
-
+@property (nonatomic, copy) NSString *value;
+@property (nonatomic, copy) NSString *valueA;
+@property (nonatomic, copy) NSString *valueB;
+@property (nonatomic, assign) BOOL enable;
 @end
 
