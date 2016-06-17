@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="uPn-IY-bzd">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Navigation Controller-->
+        <scene sceneID="dL1-2y-teB">
+            <objects>
+                <navigationController id="uPn-IY-bzd" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jJW-9k-x7e">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="jP5-v8-5G7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iid-vg-R7d" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-489" y="314"/>
+        </scene>
+        <!--有彩蛋-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
@@ -16,11 +32,97 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dOx-EM-7y0">
+                                <rect key="frame" x="250" y="250" width="100" height="100"/>
+                                <color key="backgroundColor" red="0.89411764709999997" green="0.56862745100000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Cgd-sS-708"/>
+                                    <constraint firstAttribute="height" constant="100" id="lcj-2U-sAZ"/>
+                                </constraints>
+                                <state key="normal" title="Reset"/>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="dOx-EM-7y0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="PEr-6d-0Zf"/>
+                            <constraint firstItem="dOx-EM-7y0" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="wb2-me-StE"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="有彩蛋" id="RMy-ac-Sw8">
+                        <barButtonItem key="rightBarButtonItem" title="Touch ID" id="Zde-SS-xzF">
+                            <connections>
+                                <segue destination="uUh-im-xYw" kind="show" identifier="touch id push" id="FHj-if-QbV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="resetBtn" destination="dOx-EM-7y0" id="Vud-jI-beE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="158" y="314"/>
+        </scene>
+        <!--彩蛋-->
+        <scene sceneID="wo0-1j-lbG">
+            <objects>
+                <viewController id="uUh-im-xYw" customClass="TouchIDViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zAu-8W-8s9"/>
+                        <viewControllerLayoutGuide type="bottom" id="GN5-Fo-eQG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yoK-dB-20q">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="彩蛋" id="Ia9-u3-Rtf">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="3DC-En-vH6"/>
+                    </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6FZ-3p-eSM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="812" y="314"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="uZ1-6i-MKU">
+            <objects>
+                <navigationController id="vOV-X1-WxM" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="awP-gQ-x19">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="uUh-im-xYw" kind="relationship" relationship="rootViewController" id="ryQ-ef-8Vc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Ae-yn-OvV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="812" y="-367"/>
+        </scene>
+        <!--Edit Note View Controller-->
+        <scene sceneID="88k-br-ziw">
+            <objects>
+                <viewController id="ak3-Bl-bcD" customClass="EditNoteViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HkG-r8-ND7"/>
+                        <viewControllerLayoutGuide type="bottom" id="XvN-GK-yS8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Zmv-Tn-v7n">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="A5z-eB-BLX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2275" y="314"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="FHj-if-QbV"/>
+    </inferredMetricsTieBreakers>
 </document>
