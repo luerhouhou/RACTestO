@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+#define __RACLock(LP) ({ \
+(void)pthread_mutex_lock(LP); })
+
+#define __RACUnlock(LP) ({ \
+(void)pthread_mutex_unlock(LP); })
 @class RACScopedDisposable;
 
 /// A disposable encapsulates the work necessary to tear down and cleanup a

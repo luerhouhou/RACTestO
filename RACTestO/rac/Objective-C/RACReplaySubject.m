@@ -17,7 +17,7 @@ const NSUInteger RACReplaySubjectUnlimitedCapacity = NSUIntegerMax;
 
 @interface RACReplaySubject ()
 
-@property (nonatomic, assign, readonly) NSUInteger capacity;
+@property (nonatomic, assign, readonly) NSUInteger capacity;//数量，能力
 
 // These properties should only be modified while synchronized on self.
 @property (nonatomic, strong, readonly) NSMutableArray *valuesReceived;

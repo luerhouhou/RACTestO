@@ -35,6 +35,27 @@
 	NSObject *strongObserver = weakObserver;
 	keyPath = [keyPath copy];
 
+    //递归锁，这个锁可以被同一线程多次请求，而不会引起死锁。
+    /**
+     使用NSLock时。
+     RecursiveMethod是递归调用的。所以每次进入这个block时，都会去加一次锁，而从第二次开始，由于锁已经被使用了且没有解锁，所以它需要等待锁被解除，这样就导致了死锁，线程被阻塞住了。调试器中会输出如下信息：
+     
+     value = 5
+     *** -[NSLock lock]: deadlock ( '(null)')   *** Break on _NSLockError() to debug.
+     
+     在这种情况下，我们就可以使用NSRecursiveLock。它可以允许同一线程多次加锁，而不会造成死锁。递归锁会跟踪它被lock的次数。每次成功的lock都必须平衡调用unlock操作。只有所有达到这种平衡，锁最后才能被释放，以供其它线程使用。
+     
+     NSRecursiveLock除了实现NSLocking协议的方法外，还提供了两个方法，分别如下：
+     
+     // 在给定的时间之前去尝试请求一个锁
+     - (BOOL)lockBeforeDate:(NSDate *)limit
+     
+     // 尝试去请求一个锁，并会立即返回一个布尔值，表示尝试是否成功
+     - (BOOL)tryLock
+     
+     这两个方法都可以用于在多线程的情况下，去尝试请求一个递归锁，然后根据返回的布尔值，来做相应的处理。
+     
+     */
 	NSRecursiveLock *objectLock = [[NSRecursiveLock alloc] init];
 	objectLock.name = @"org.reactivecocoa.ReactiveCocoa.NSObjectRACPropertySubscribing";
 
@@ -49,6 +70,11 @@
 			// Forces deallocation to wait if the object variables are currently
 			// being read on another thread.
 			[objectLock lock];
+            /**
+             *  #define onExit \
+             rac_keywordify \
+             __strong rac_cleanupBlock_t metamacro_concat(rac_exitBlock_, __LINE__) __attribute__((cleanup(rac_executeCleanupBlock), unused)) = ^
+             */
 			@onExit {
 				[objectLock unlock];
 			};

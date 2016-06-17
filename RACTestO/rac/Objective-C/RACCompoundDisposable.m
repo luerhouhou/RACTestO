@@ -5,11 +5,10 @@
 //  Created by Josh Abernathy on 11/30/12.
 //  Copyright (c) 2012 GitHub, Inc. All rights reserved.
 //
-
 #import "RACCompoundDisposable.h"
 #import "RACCompoundDisposableProvider.h"
 #import <libkern/OSAtomic.h>
-
+#import <pthread.h>
 // The number of child disposables for which space will be reserved directly in
 // `RACCompoundDisposable`.
 //
@@ -30,27 +29,27 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 
 @interface RACCompoundDisposable () {
 	// Used for synchronization.
-	OSSpinLock _spinLock;
-
+    pthread_mutex_t _mutex;
+    
 	#if RACCompoundDisposableInlineCount
 	// A fast array to the first N of the receiver's disposables.
 	//
 	// Once this is full, `_disposables` will be created and used for additional
 	// disposables.
 	//
-	// This array should only be manipulated while _spinLock is held.
+	// This array should only be manipulated while _mutex is held.
 	RACDisposable *_inlineDisposables[RACCompoundDisposableInlineCount];
 	#endif
 
 	// Contains the receiver's disposables.
 	//
-	// This array should only be manipulated while _spinLock is held. If
+	// This array should only be manipulated while _mutex is held. If
 	// `_disposed` is YES, this may be NULL.
 	CFMutableArrayRef _disposables;
 
 	// Whether the receiver has already been disposed.
 	//
-	// This ivar should only be accessed while _spinLock is held.
+	// This ivar should only be accessed while _mutex is held.
 	BOOL _disposed;
 }
 
@@ -61,10 +60,9 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 #pragma mark Properties
 
 - (BOOL)isDisposed {
-	OSSpinLockLock(&_spinLock);
+    __RACLock(&_mutex);
 	BOOL disposed = _disposed;
-	OSSpinLockUnlock(&_spinLock);
-
+    __RACUnlock(&_mutex);
 	return disposed;
 }
 
@@ -98,7 +96,9 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 		CFRange range = CFRangeMake(RACCompoundDisposableInlineCount, (CFIndex)otherDisposables.count - RACCompoundDisposableInlineCount);
 		CFArrayAppendArray(_disposables, (__bridge CFArrayRef)otherDisposables, range);
 	}
-
+    
+    //初始化互斥锁
+    pthread_mutex_init(&_mutex, 0);
 	return self;
 }
 
@@ -118,6 +118,8 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 		CFRelease(_disposables);
 		_disposables = NULL;
 	}
+    
+    pthread_mutex_destroy(&_mutex);
 }
 
 #pragma mark Addition and Removal
@@ -128,7 +130,7 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 
 	BOOL shouldDispose = NO;
 
-	OSSpinLockLock(&_spinLock);
+	__RACLock(&_mutex);
 	{
 		if (_disposed) {
 			shouldDispose = YES;
@@ -154,7 +156,7 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 		#endif
 		}
 	}
-	OSSpinLockUnlock(&_spinLock);
+	__RACUnlock(&_mutex);
 
 	// Performed outside of the lock in case the compound disposable is used
 	// recursively.
@@ -164,7 +166,7 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 - (void)removeDisposable:(RACDisposable *)disposable {
 	if (disposable == nil) return;
 
-	OSSpinLockLock(&_spinLock);
+	__RACLock(&_mutex);
 	{
 		if (!_disposed) {
 			#if RACCompoundDisposableInlineCount
@@ -188,7 +190,7 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 			}
 		}
 	}
-	OSSpinLockUnlock(&_spinLock);
+	__RACUnlock(&_mutex);
 }
 
 #pragma mark RACDisposable
@@ -205,7 +207,7 @@ static void disposeEach(const void *value, void *context) {
 
 	CFArrayRef remainingDisposables = NULL;
 
-	OSSpinLockLock(&_spinLock);
+	__RACLock(&_mutex);
 	{
 		_disposed = YES;
 
@@ -219,7 +221,7 @@ static void disposeEach(const void *value, void *context) {
 		remainingDisposables = _disposables;
 		_disposables = NULL;
 	}
-	OSSpinLockUnlock(&_spinLock);
+	__RACUnlock(&_mutex);
 
 	#if RACCompoundDisposableInlineCount
 	// Dispose outside of the lock in case the compound disposable is used

@@ -52,7 +52,7 @@
 		}
 	}];
 
-	_disposable = [RACCompoundDisposable compoundDisposable];
+	_disposable = [RACCompoundDisposable compoundDisposable];//合成
 	[_disposable addDisposable:selfDisposable];
 
 	return self;
