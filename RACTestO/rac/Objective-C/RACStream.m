@@ -33,7 +33,7 @@
 	return nil;
 }
 
-+ (instancetype)return:(id)value {
++ (instancetype) return:(id)value {//
 	return nil;
 }
 
@@ -92,7 +92,7 @@
 	Class class = self.class;
 	
 	return [[self flattenMap:^(id value) {
-		return [class return:block(value)];
+		return [class return:block(value)];//return 为 rac实现的方法
 	}] setNameWithFormat:@"[%@] -map:", self.name];
 }
 
@@ -203,7 +203,7 @@
 			continue;
 		}
 
-		current = block(current, stream);
+		current = block(current, stream);//循环嵌套，((((1), 2), 3),4)
 	}
 
 	if (current == nil) return [self empty];
@@ -221,7 +221,7 @@
 			xs = (xs.count > 1 ? xs.first : nil);
 		}
 
-		return [RACTuple tupleWithObjectsFromArray:values];
+		return [RACTuple tupleWithObjectsFromArray:values];//(3,2,1)
 	}];
 }
 

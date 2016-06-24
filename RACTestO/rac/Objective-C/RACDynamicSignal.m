@@ -32,7 +32,7 @@
 }
 
 #pragma mark Managing Subscribers
-
+//cold
 - (RACDisposable *)subscribe:(id<RACSubscriber>)subscriber {
 	NSCParameterAssert(subscriber != nil);
 

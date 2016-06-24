@@ -38,11 +38,11 @@
 }
 
 #pragma mark RACSequence
-
+// 第一个元素
 - (id)head {
 	return self.backingArray[self.offset];
 }
-
+// 除去第一个剩下的元素
 - (RACSequence *)tail {
 	RACSequence *sequence = [self.class sequenceWithArray:self.backingArray offset:self.offset + 1];
 	sequence.name = self.name;

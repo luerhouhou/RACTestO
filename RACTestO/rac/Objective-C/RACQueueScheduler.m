@@ -64,6 +64,7 @@
 	RACDisposable *disposable = [[RACDisposable alloc] init];
 
 	dispatch_async(self.queue, ^{
+        
 		if (disposable.disposed) return;
 		[self performAsCurrentScheduler:block];
 	});

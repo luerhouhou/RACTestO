@@ -40,7 +40,7 @@
 
 #pragma mark Lifecycle
 
-+ (RACSignal *)return:(id)value {
++ (RACSignal *)return:(id)value {//
 #ifndef DEBUG
 	// In release builds, use singletons for two very common cases.
 	if (value == RACUnit.defaultUnit) {

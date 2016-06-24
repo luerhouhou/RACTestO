@@ -34,6 +34,7 @@
 }
 
 - (id)invokeWithArguments:(RACTuple *)arguments {
+    //多参
 	SEL selector = [self selectorForArgumentCount:arguments.count];
 	NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:selector]];
 	invocation.selector = selector;
@@ -48,7 +49,7 @@
 	[invocation invoke];
 	
     /**
-     *  原因是在arc模式下，getReturnValue：仅仅是从invocation的返回值拷贝到指定的内存地址，如果返回值是一个NSObject对象的话，是没有处理起内存管理的。而我们在定义returnVal时使用的是__strong类型的指针对象，arc就会假设该内存块已被retain（实际没有），当returnVal出了定义域释放时，导致该crash。假如在定义之前有赋值的话，还会造成内存泄露的问题。
+     *  原因是在arc模式下，getReturnValue：仅仅是从invocation的返回值拷贝到指定的内存地址，如果返回值是一个NSObject对象的话，是没有处理起内存管理的。而我们在定义returnVal时使用的是__strong类型的指针对象，arc就会假设该内存块已被retain（实际没有），当returnVal出了定义域释放时，导致该crash。假如在定义之前有赋值的话，还会造成内存泄露的问题。（对同一块内存地址反复释放）
      */
 	__unsafe_unretained id returnVal;
 	[invocation getReturnValue:&returnVal];

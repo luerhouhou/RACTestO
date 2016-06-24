@@ -18,9 +18,271 @@
 
 @implementation ViewController
 
+- (IBAction)resetClick:(id)sender {
+    [self viewDidLoad];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    //--------------------1
+//    RACSignal *signal = @[@1,@2,@3,@4,@5,@6,@7,@8,@9].rac_sequence.signal;
+//    [signal subscribeNext:^(id x) {//创建定时器依次打印
+//        NSLog(@"1--//%@",x);
+//    }];
+    
+    //--------------------2
+//    __block unsigned subscriptions = 0;
+//    
+//    RACSignal *loggingSignal = [RACSignal createSignal:^ RACDisposable * (id<RACSubscriber> subscriber) {
+//        subscriptions++;
+//        [subscriber sendCompleted];//触发Completed方法
+//        return nil;
+//    }];
+//    
+//    // Does not output anything yet
+//    RACSignal *logging = [loggingSignal doCompleted:^{//通过前一个信号1来创建新的信号2，并在1执行前插入信号2的任务
+//        NSLog(@"about to complete subscription %u", subscriptions);
+//    }];
+//    
+//    // Outputs:
+//    // about to complete subscription 1
+//    // subscription 1
+//    [logging subscribeNext:^(id x) {
+//        NSLog(@"subscription %u", subscriptions);
+//    } error:^(NSError *error) {
+//        NSLog(@"subscription %u", subscriptions);
+//    } completed:^{//赋值并订阅
+//        NSLog(@"subscription %u", subscriptions);
+//    }];
+//    [loggingSignal subscribeCompleted:^{//给self.completed 赋值并订阅，1与logging是两个不同的信号
+//        NSLog(@"subscription %u", subscriptions);
+//    }];
+    
+//    RACSequence *letters = [@"A B C D E F G H I" componentsSeparatedByString:@" "].rac_sequence;
+//    
+//    // Contains: AA BB CC DD EE FF GG HH II
+//    RACSequence *mapped = [letters map:^(NSString *value) {
+//        return [value stringByAppendingString:value];
+//    }];
+//    
+//    [mapped.signal subscribeNext:^(id x) {
+//        NSLog(@"%@",x);
+//    }];
+    
+//    RACSequence *numbers = [@"1 2 3 4 5 6 7 8 9" componentsSeparatedByString:@" "].rac_sequence;
+//    
+//    // Contains: 2 4 6 8
+//    RACSequence *filtered = [numbers filter:^ BOOL (NSString *value) {
+//        return (value.intValue % 2) == 0;
+//    }];
+    
+//    RACSequence *letters = [@"A B C D E F G H I" componentsSeparatedByString:@" "].rac_sequence;
+//    RACSequence *numbers = [@"1 2 3 4 5 6 7 8 9" componentsSeparatedByString:@" "].rac_sequence;
+//    
+//    // Contains: A B C D E F G H I 1 2 3 4 5 6 7 8 9
+//    RACSequence *concatenated = [letters concat:numbers];//[@[letters, numbers] flatten] 联合打平
+    
+    //-----------------3
+//    RACSequence *letters = [@"A B C D E F G H I" componentsSeparatedByString:@" "].rac_sequence;
+//    RACSequence *numbers = [@"1 2 3 4 5 6 7 8 9" componentsSeparatedByString:@" "].rac_sequence;
+//    RACSequence *sequenceOfSequences = @[ letters, numbers ].rac_sequence;
+//    
+//    [sequenceOfSequences.signal subscribeNext:^(id x) {
+//        NSLog(@"3--//%@",x);
+//    }];
+//    
+//    // Contains: A B C D E F G H I 1 2 3 4 5 6 7 8 9
+//    RACSequence *flattened = [sequenceOfSequences flatten];//嵌套打平
+//    
+//    [flattened.signal subscribeNext:^(id x) {
+//        NSLog(@"3----//%@",x);
+//    }];
+
+    //-----------------4
+//    RACSubject *letters = [RACSubject subject];
+//    RACSubject *numbers = [RACSubject subject];
+//    RACSignal *signalOfSignals = [RACSignal createSignal:^ RACDisposable * (id<RACSubscriber> subscriber) {
+//        [subscriber sendNext:letters];//sendNext就是执行nextBlock
+//        [subscriber sendNext:numbers];
+//        [subscriber sendCompleted];
+//        return nil;
+//    }];
+//  
+//    [letters subscribeNext:^(id x) {
+//        NSLog(@"letters--1//%@", x);
+//    }];
+//    [letters subscribeNext:^(id x) {//RACSubject可以有多个订阅者
+//        NSLog(@"letters--2//%@", x);
+//    }];
+//    [numbers subscribeNext:^(id x) {
+//        NSLog(@"numbers//%@", x);
+//    }];
+//    
+//    [signalOfSignals subscribeNext:^(NSString *x) {//未打平
+//        NSLog(@"%@", x);
+//    }];
+//    [signalOfSignals subscribeNext:^(id x) {//RACSignal同一时间只有一个订阅者
+//        NSLog(@"RACSignal同一时间只有一个订阅者//%@",x);
+//    }];
+//    RACSignal *flattened = [signalOfSignals flatten];
+//    
+//    // Outputs: A 1 B C 2
+//    [flattened subscribeNext:^(NSString *x) {
+//        NSLog(@"%@", x);
+//    }];
+//    
+//    [letters sendNext:@"A"];//RACSubject同一时间可以有多个订阅者， sendNext会执行所有订阅者的nextBlock
+//    [numbers sendNext:@"1"];
+//    [letters sendNext:@"B"];
+//    [letters sendNext:@"C"];
+//    [numbers sendNext:@"2"];
+    
+    //--------------5
+//    RACSequence *numbers = [@"1 2 3 4 5 6 7 8 9" componentsSeparatedByString:@" "].rac_sequence;
+//    
+//    // Contains: 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9
+//    RACSequence *extended = [numbers flattenMap:^(NSString *num) {
+//        return @[ num, num ].rac_sequence;
+//    }];
+//    
+//    [extended.signal subscribeNext:^(id x) {
+//        NSLog(@"%@",x);
+//    }];
+//    
+//    // Contains: 1_ 3_ 5_ 7_ 9_
+//    RACSequence *edited = [numbers flattenMap:^(NSString *num) {
+//        if (num.intValue % 2 == 0) {
+//            return [RACSequence empty];
+//        } else {
+//            NSString *newNum = [num stringByAppendingString:@"_"];
+//            return [RACSequence return:newNum];
+//        }
+//    }];
+//    [edited.signal subscribeNext:^(id x) {
+//        NSLog(@"--%@",x);
+//    }];
+//    RACSignal *letters = [@"A B C D E F G H I" componentsSeparatedByString:@" "].rac_sequence.signal;
+//    
+//    [[letters
+//      flattenMap:^(NSString *letter) {
+//          return [database saveEntriesForLetter:letter];
+//      }]
+//     subscribeCompleted:^{
+//         NSLog(@"All database entries saved successfully.");
+//     }];
+    
+//    RACSignal *letters = [@"A B C D E F G H I" componentsSeparatedByString:@" "].rac_sequence.signal;
+//    
+//    // The new signal only contains: 1 2 3 4 5 6 7 8 9
+//    //
+//    // But when subscribed to, it also outputs: A B C D E F G H I
+//    RACSignal *sequenced = [[letters
+//                             doNext:^(NSString *letter) {
+//                                 NSLog(@"%@", letter);
+//                             }]
+//                            then:^{
+//                                return [@"1 2 3 4 5 6 7 8 9" componentsSeparatedByString:@" "].rac_sequence.signal;
+//                            }];
+//    
+//    [sequenced subscribeNext:^(id x) {
+//        NSLog(@"--%@",x);
+//    }];
+    
+//    RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//        NSLog(@"第一步");
+//        [subscriber sendNext:@"11111111"];
+//        [subscriber sendCompleted];
+//        return nil;
+//    }];
+//    
+////    [signal subscribeNext:^(id x) {
+////        NSLog(@"--%@",x);
+////    }];
+////    
+//    RACSignal *signal1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//        NSLog(@"第二步");
+//        [subscriber sendNext:@"2222222"];
+//        return nil;
+//    }];
+//    
+////    [[signal concat:signal1] subscribeNext:^(id x) {//concat 只有当第一个信号sendCompleted之后，第二个信号才会接着执行 先后顺序
+////        NSLog(@"concat//%@",x);
+////    }];
+//    
+//    [[[signal ignoreValues] concat:signal1] subscribeNext:^(id x) {//concat 只有当第一个信号sendCompleted之后，第二个信号才会接着执行
+//        NSLog(@"concat//%@",x);
+//    }];
+////    [[signal concat:[@"1 2 3 4 5 6 7 8 9" componentsSeparatedByString:@" "].rac_sequence.signal] subscribeNext:^(id x) {
+////        NSLog(@"//%@",x);
+////    }];
+//    
+//    [[signal then:^RACSignal *{ //只有当第一个信号sendCompleted之后，第二个信号才会接着执行 先后顺序，then会忽略第一个信号所有的sendNext，相当于[[signal ignoreValues] concat:signal1]
+//        return [@"1 2 3 4 5 6 7 8 9" componentsSeparatedByString:@" "].rac_sequence.signal;
+//    }] subscribeNext:^(id x) {
+//        NSLog(@"//%@",x);
+//    }];
+    
+//    RACSubject *letters = [RACSubject subject];
+//    RACSubject *numbers = [RACSubject subject];
+//    RACSignal *merged = [RACSignal merge:@[ letters, numbers ]];//将信号组合并打平，每一个sendNext就作为merge结果sendNext
+//    
+//    // Outputs: A 1 B C 2
+//    [merged subscribeNext:^(NSString *x) {
+//        NSLog(@"%@", x);
+//    }];
+//    
+//    [letters sendNext:@"A"];
+//    [numbers sendNext:@"1"];
+//    [letters sendNext:@"B"];
+//    [letters sendNext:@"C"];
+//    [numbers sendNext:@"2"];
+    
+//    RACSubject *letters = [RACSubject subject];
+//    RACSubject *numbers = [RACSubject subject];
+//    RACSignal *combined = [RACSignal
+//                           combineLatest:@[ letters, numbers ]//等都有结果后，把两个信号最新的结果sendNext
+//                           reduce:^(NSString *letter, NSString *number) {
+//                               return [letter stringByAppendingString:number];
+//                           }];
+//    
+//    // Outputs: B1 B2 C2 C3
+//    [combined subscribeNext:^(id x) {
+//        NSLog(@"%@", x);
+//    }];
+//    
+//    [letters sendNext:@"A"];
+//    [letters sendNext:@"B"];
+//    [numbers sendNext:@"1"];
+//    [numbers sendNext:@"2"];
+//    [letters sendNext:@"C"];
+//    [numbers sendNext:@"3"];
+    
+    //-----------------大大的问号？？？？？？？？？？？？？？？？
+//    RACSubject *letters = [RACSubject subject];
+//    RACSubject *numbers = [RACSubject subject];
+//    RACSubject *signalOfSignals = [RACSubject subject];
+//    
+//    RACSignal *switched = [signalOfSignals switchToLatest];
+//    
+//    // Outputs: A B 1 D
+//    [switched subscribeNext:^(NSString *x) {
+//        NSLog(@"%@", x);
+//    }];
+//    
+//    [signalOfSignals sendNext:letters];
+//    [letters sendNext:@"A"];
+//    [letters sendNext:@"B"];
+//    
+//    [signalOfSignals sendNext:numbers];
+//    [letters sendNext:@"C"];
+//    [letters sendNext:@"C"];
+//    [numbers sendNext:@"1"];
+//    
+//    [signalOfSignals sendNext:letters];
+//    [numbers sendNext:@"2"];
+//    [letters sendNext:@"D"];
     
     //    BNRNegativeArray *arr = [[BNRNegativeArray alloc] init];
     //    arr[0] = @"wew";
@@ -482,13 +744,20 @@
     //        NSLog(@"%@", x);
     //    }];
     //
-    @weakify(self);
-    self.resetBtn.rac_command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
-        @strongify(self);
-        [self resetClick];
-        return [RACSignal empty];
-    }];
-    
+//    @weakify(self);
+//    self.resetBtn.rac_command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+//        @strongify(self);
+//        [self resetClick];
+//        return [RACSignal empty];
+//    }];
+//    
+//    [[self fetchColdSignal] subscribeNext:^(id x) {
+//        
+//    } error:^(NSError *error) {
+//        
+//    } completed:^{
+//        
+//    }];
 
 }
 
@@ -518,6 +787,20 @@
         [subject sendError:error];
     }];
     return subject;
+}
+
+- (RACSignal *)fetchColdSignal
+{
+    RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:@1];
+        [subscriber sendNext:@2];
+        [subscriber sendNext:@3];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"/////");
+        }];
+    }];
+    return signal;
 }
 
 - (void)didReceiveMemoryWarning {

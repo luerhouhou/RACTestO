@@ -88,7 +88,7 @@
 	return [RACEmptySignal empty];
 }
 
-+ (RACSignal *)return:(id)value {
++ (RACSignal *)return:(id)value {//
 	return [RACReturnSignal return:value];
 }
 
@@ -122,13 +122,13 @@
 
 				if (signals.count == 0) {
 					[subscriber sendCompleted];
-					[compoundDisposable dispose];
+					[compoundDisposable dispose];//完成信号并销毁
 				} else {
 					removeDisposable = YES;
 				}
 			}
 
-			if (removeDisposable) [compoundDisposable removeDisposable:finishedDisposable];
+			if (removeDisposable) [compoundDisposable removeDisposable:finishedDisposable];//完成一个信号
 		};
 
 		void (^addSignal)(RACSignal *) = ^(RACSignal *signal) {
@@ -280,7 +280,7 @@
 	NSCAssert(NO, @"This method must be overridden by subclasses");
 	return nil;
 }
-
+//RACDynamicSignal
 - (RACDisposable *)subscribeNext:(void (^)(id x))nextBlock {
 	NSCParameterAssert(nextBlock != NULL);
 	

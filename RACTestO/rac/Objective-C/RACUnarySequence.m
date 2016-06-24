@@ -25,7 +25,7 @@
 
 #pragma mark Lifecycle
 
-+ (instancetype)return:(id)value {
++ (instancetype)return:(id)value {//
 	RACUnarySequence *sequence = [[self alloc] init];
 	sequence.head = value;
 	return [sequence setNameWithFormat:@"+return: %@", RACDescription(value)];

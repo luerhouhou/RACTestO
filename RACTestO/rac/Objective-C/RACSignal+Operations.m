@@ -410,7 +410,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 		void (^sendNext)(void) = ^{
 			@synchronized (disposable) {
 				if (lastSelfValue == nil || lastOtherValue == nil) return;
-				[subscriber sendNext:RACTuplePack(lastSelfValue, lastOtherValue)];
+				[subscriber sendNext:RACTuplePack(lastSelfValue, lastOtherValue)];//发送最后改变的两个值
 			}
 		};
 
@@ -484,7 +484,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 	return [[[RACSignal
 		createSignal:^ RACDisposable * (id<RACSubscriber> subscriber) {
 			for (RACSignal *signal in copiedSignals) {
-				[subscriber sendNext:signal];
+				[subscriber sendNext:signal];//快速将所有信号合并到一个
 			}
 
 			[subscriber sendCompleted];
@@ -794,7 +794,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 
 - (RACSignal *)switchToLatest {
 	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
-		RACMulticastConnection *connection = [self publish];
+		RACMulticastConnection *connection = [self publish];//[self multicast:[RACSubject subject]]
 
 		RACDisposable *subscriptionDisposable = [[connection.signal
 			flattenMap:^(RACSignal *x) {
@@ -806,7 +806,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 			}]
 			subscribe:subscriber];
 
-		RACDisposable *connectionDisposable = [connection connect];
+		RACDisposable *connectionDisposable = [connection connect];//只订阅一次
 		return [RACDisposable disposableWithBlock:^{
 			[subscriptionDisposable dispose];
 			[connectionDisposable dispose];

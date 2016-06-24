@@ -81,7 +81,7 @@
 	return RACEmptySequence.empty;
 }
 
-+ (instancetype)return:(id)value {
++ (instancetype)return:(id)value {//
 	return [RACUnarySequence return:value];
 }
 
@@ -183,6 +183,7 @@
 	return [[self signalWithScheduler:[RACScheduler scheduler]] setNameWithFormat:@"[%@] -signal", self.name];
 }
 
+// RACTargetQueueScheduler : RACQueueScheduler
 - (RACSignal *)signalWithScheduler:(RACScheduler *)scheduler {
 	return [[RACSignal createSignal:^(id<RACSubscriber> subscriber) {
 		__block RACSequence *sequence = self;
@@ -193,7 +194,7 @@
 				return;
 			}
 
-			[subscriber sendNext:sequence.head];
+			[subscriber sendNext:sequence.head];//backingArray[self.offset]
 
 			sequence = sequence.tail;
 			reschedule();
