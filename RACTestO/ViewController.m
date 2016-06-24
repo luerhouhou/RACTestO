@@ -10,7 +10,7 @@
 #import "ReactiveCocoa.h"
 #import "EXTScope.h"
 #import <AFNetworking.h>
-#import <LocalAuthentication/LocalAuthentication.h>
+//#import <LocalAuthentication/LocalAuthentication.h>
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *resetBtn;
 
@@ -21,11 +21,39 @@
 - (IBAction)resetClick:(id)sender {
     [self viewDidLoad];
 }
+- (NSString *)gbkString:(NSString *)input
+{
+    return CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
+                                                                     kCFAllocatorDefault,
+                                                                     (CFStringRef)input,
+                                                                     (CFStringRef)@"!$&'()*+,-./:;=?@_~#[]",
+                                                                     NULL,
+                                                                     kCFStringEncodingGB_18030_2000));
+}
+//
+//- (NSString *)stringGBK:(NSString *)input
+//{
+//    return CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(
+//                                                                                     kCFAllocatorDefault,
+//                                                                                     
+//                                                                                     (CFStringRef)input,
+//                                                                                     
+//                                                                                     (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]",
+//                                                                                     
+//                                                                                     kCFStringEncodingGB_2312_80));
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
+    NSString *a = @"入金";
+    NSString *s =[self gbkString:a];
+    NSLog(@"%@",s);
+    NSString *ss =[self gbkString:s];
+    NSLog(@"%@",ss);
+//    NSLog(@"%@",[self stringGBK:@"%25C8%25EB%25BD%25F0"]);
+//    NSLog(@"%@",[self stringGBK:[self stringGBK:@"%25C8%25EB%25BD%25F0"]]);
+}
     //--------------------1
 //    RACSignal *signal = @[@1,@2,@3,@4,@5,@6,@7,@8,@9].rac_sequence.signal;
 //    [signal subscribeNext:^(id x) {//创建定时器依次打印
@@ -759,110 +787,110 @@
 //        
 //    }];
 
-}
+//}
 
-- (void)resetClick
-{
-    [[self fetchUserInfo] subscribeNext:^(id x) {
-        NSLog(@"next//%@",x);
-    } error:^(NSError *error) {
-        NSLog(@"error//%@",@(error.code));
-    } completed:^{
-        NSLog(@"completed");
-    }];
-}
-
-- (RACSignal *)fetchUserInfo
-{
-    RACSubject *subject = [RACSubject subject];
-    NSDictionary *params = @{
-                             @"token":@"rO0ABXQAMcOWwq5xIiLCmkTAgFVzw7IswqHDhcOaw4lDecKgw7A0wp1Uw4rDpFzDqzE/w7XDkhE="
-                             };
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    
-    [manager GET:@"http://test.dx.device.baidao.com/jry-device/dx/ajax/user/getUserByToken" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-        [subject sendNext:@"1"];
-        [subject sendCompleted];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [subject sendError:error];
-    }];
-    return subject;
-}
-
-- (RACSignal *)fetchColdSignal
-{
-    RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [subscriber sendNext:@1];
-        [subscriber sendNext:@2];
-        [subscriber sendNext:@3];
-        [subscriber sendCompleted];
-        return [RACDisposable disposableWithBlock:^{
-            NSLog(@"/////");
-        }];
-    }];
-    return signal;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - touch id
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
-{
-    if ([identifier isEqualToString:@"touch id push"]) {
-        [self handleTouchId];
-        return NO;
-    }
-    return YES;
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    
-}
-
-- (void)handleTouchId
-{
-    double version = [[UIDevice currentDevice].systemVersion doubleValue];
-    if (version < 8.0) {
-        return;
-    }
-    LAContext *laContent = [[LAContext alloc] init];
-    NSError *error;
-    if ([laContent canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        [laContent evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"Touch ID Test" reply:^(BOOL success, NSError * _Nullable error) {
-            if (success) {
-                NSLog(@"sucess//");
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self performSegueWithIdentifier:@"touch id push" sender:self];
-                });
-            }
-            if (error) {
-                NSLog(@"error//%@",error);
-                switch (error.code) {
-                    case LAErrorAppCancel:
-                    case LAErrorUserCancel:
-                    case LAErrorUserFallback:
-                    case LAErrorSystemCancel:
-                    case LAErrorInvalidContext:
-                    case LAErrorPasscodeNotSet:
-                    case LAErrorTouchIDLockout:
-                    case LAErrorTouchIDNotEnrolled:
-                    case LAErrorTouchIDNotAvailable:
-                    case LAErrorAuthenticationFailed:
-                        break;
-                        
-                    default:
-                        break;
-                }
-                
-            }
-        }];
-    } else {
-        NSLog(@"error//%@",error);
-    }
-}
+//- (void)resetClick
+//{
+//    [[self fetchUserInfo] subscribeNext:^(id x) {
+//        NSLog(@"next//%@",x);
+//    } error:^(NSError *error) {
+//        NSLog(@"error//%@",@(error.code));
+//    } completed:^{
+//        NSLog(@"completed");
+//    }];
+//}
+//
+//- (RACSignal *)fetchUserInfo
+//{
+//    RACSubject *subject = [RACSubject subject];
+//    NSDictionary *params = @{
+//                             @"token":@"rO0ABXQAMcOWwq5xIiLCmkTAgFVzw7IswqHDhcOaw4lDecKgw7A0wp1Uw4rDpFzDqzE/w7XDkhE="
+//                             };
+//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    
+//    [manager GET:@"http://test.dx.device.baidao.com/jry-device/dx/ajax/user/getUserByToken" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+//        [subject sendNext:@"1"];
+//        [subject sendCompleted];
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        [subject sendError:error];
+//    }];
+//    return subject;
+//}
+//
+//- (RACSignal *)fetchColdSignal
+//{
+//    RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//        [subscriber sendNext:@1];
+//        [subscriber sendNext:@2];
+//        [subscriber sendNext:@3];
+//        [subscriber sendCompleted];
+//        return [RACDisposable disposableWithBlock:^{
+//            NSLog(@"/////");
+//        }];
+//    }];
+//    return signal;
+//}
+//
+//- (void)didReceiveMemoryWarning {
+//    [super didReceiveMemoryWarning];
+//    // Dispose of any resources that can be recreated.
+//}
+//
+//#pragma mark - touch id
+//- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+//{
+//    if ([identifier isEqualToString:@"touch id push"]) {
+//        [self handleTouchId];
+//        return NO;
+//    }
+//    return YES;
+//}
+//
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+//{
+//    
+//}
+//
+//- (void)handleTouchId
+//{
+//    double version = [[UIDevice currentDevice].systemVersion doubleValue];
+//    if (version < 8.0) {
+//        return;
+//    }
+//    LAContext *laContent = [[LAContext alloc] init];
+//    NSError *error;
+//    if ([laContent canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+//        [laContent evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"Touch ID Test" reply:^(BOOL success, NSError * _Nullable error) {
+//            if (success) {
+//                NSLog(@"sucess//");
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self performSegueWithIdentifier:@"touch id push" sender:self];
+//                });
+//            }
+//            if (error) {
+//                NSLog(@"error//%@",error);
+//                switch (error.code) {
+//                    case LAErrorAppCancel:
+//                    case LAErrorUserCancel:
+//                    case LAErrorUserFallback:
+//                    case LAErrorSystemCancel:
+//                    case LAErrorInvalidContext:
+//                    case LAErrorPasscodeNotSet:
+//                    case LAErrorTouchIDLockout:
+//                    case LAErrorTouchIDNotEnrolled:
+//                    case LAErrorTouchIDNotAvailable:
+//                    case LAErrorAuthenticationFailed:
+//                        break;
+//                        
+//                    default:
+//                        break;
+//                }
+//                
+//            }
+//        }];
+//    } else {
+//        NSLog(@"error//%@",error);
+//    }
+//}
 
 @end

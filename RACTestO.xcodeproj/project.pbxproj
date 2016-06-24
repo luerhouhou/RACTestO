@@ -107,10 +107,11 @@
 		0C062BBF1D06DD2F00041DB0 /* UITableViewHeaderFooterView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C062B5C1D06DD2F00041DB0 /* UITableViewHeaderFooterView+RACSignalSupport.m */; };
 		0C062BC01D06DD2F00041DB0 /* UITextField+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C062B5E1D06DD2F00041DB0 /* UITextField+RACSignalSupport.m */; };
 		0C062BC11D06DD2F00041DB0 /* UITextView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C062B601D06DD2F00041DB0 /* UITextView+RACSignalSupport.m */; };
+		0C6A741D1D1D505600377C1D /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C6A741C1D1D505600377C1D /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0CCBE0F11D12961D004957D9 /* TouchIDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CCBE0F01D12961D004957D9 /* TouchIDViewController.m */; };
 		0CCBE0F41D1296CF004957D9 /* EditNoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CCBE0F31D1296CF004957D9 /* EditNoteViewController.m */; };
-		0CCBE0F61D1298DA004957D9 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CCBE0F51D1298DA004957D9 /* LocalAuthentication.framework */; };
-		A03B6484839C2217F0D93B35 /* libPods-RACTestO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 523935CDFC379AEF0C731477 /* libPods-RACTestO.a */; };
+		0CCBE0F61D1298DA004957D9 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CCBE0F51D1298DA004957D9 /* LocalAuthentication.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A03B6484839C2217F0D93B35 /* libPods-RACTestO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 523935CDFC379AEF0C731477 /* libPods-RACTestO.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -340,6 +341,7 @@
 		0C062B5F1D06DD2F00041DB0 /* UITextView+RACSignalSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+RACSignalSupport.h"; sourceTree = "<group>"; };
 		0C062B601D06DD2F00041DB0 /* UITextView+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+RACSignalSupport.m"; sourceTree = "<group>"; };
 		0C062BC21D07AE2500041DB0 /* ReactiveCocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactiveCocoa.h; sourceTree = "<group>"; };
+		0C6A741C1D1D505600377C1D /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		0CCBE0EF1D12961D004957D9 /* TouchIDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchIDViewController.h; sourceTree = "<group>"; };
 		0CCBE0F01D12961D004957D9 /* TouchIDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchIDViewController.m; sourceTree = "<group>"; };
 		0CCBE0F21D1296CF004957D9 /* EditNoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditNoteViewController.h; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C6A741D1D1D505600377C1D /* CoreFoundation.framework in Frameworks */,
 				0CCBE0F61D1298DA004957D9 /* LocalAuthentication.framework in Frameworks */,
 				A03B6484839C2217F0D93B35 /* libPods-RACTestO.a in Frameworks */,
 			);
@@ -674,6 +677,7 @@
 		FDB0DDBF198E495E4CFFB1EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0C6A741C1D1D505600377C1D /* CoreFoundation.framework */,
 				0CCBE0F51D1298DA004957D9 /* LocalAuthentication.framework */,
 				523935CDFC379AEF0C731477 /* libPods-RACTestO.a */,
 			);
@@ -1102,6 +1106,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RACTestO/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ytx.RACTestO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1114,6 +1119,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = RACTestO/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ytx.RACTestO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
