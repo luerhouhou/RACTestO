@@ -48,7 +48,7 @@
 #pragma mark Naming
 
 - (instancetype)setNameWithFormat:(NSString *)format, ... {
-	if (getenv("RAC_DEBUG_SIGNAL_NAMES") == NULL) return self;
+//	if (getenv("RAC_DEBUG_SIGNAL_NAMES") == NULL) return self;
 
 	NSCParameterAssert(format != nil);
 
@@ -59,6 +59,7 @@
 	va_end(args);
 
 	self.name = str;
+    NSLog(@"==//%@",self.name);
 	return self;
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import "TouchIDViewController.h"
-
+#import "EFSLogger.h"
 @interface TouchIDViewController ()
 
 @end
@@ -17,6 +17,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
+    NSString *url = @"http://baidu.com";
+    NSError *error = nil;
+    NSDictionary *dict = @{};
+//    EFSLog(url,dict,error);
+    EFSLog(url, dict, error)
+//    [[[EFSLogger alloc] init] logWithURLString:url params:dict error:error];
+    DLog(@"3333===%@",@"22");
 }
 
 - (void)didReceiveMemoryWarning {

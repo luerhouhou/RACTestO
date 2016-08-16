@@ -10,7 +10,7 @@
 #import "ReactiveCocoa.h"
 #import "EXTScope.h"
 #import <AFNetworking.h>
-//#import <LocalAuthentication/LocalAuthentication.h>
+#import <LocalAuthentication/LocalAuthentication.h>
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *resetBtn;
 
@@ -19,41 +19,19 @@
 @implementation ViewController
 
 - (IBAction)resetClick:(id)sender {
-    [self viewDidLoad];
+//    [self viewDidLoad];
+    [@[@1,@2,@3,@4,@5,@6,@7,@8,@9].rac_sequence.signal subscribeNext:^(id x) {
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(<#delayInSeconds#> * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            <#code to be executed after a specified delay#>
+//        });
+        NSLog(@"%@",x);
+    }];
 }
-- (NSString *)gbkString:(NSString *)input
-{
-    return CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
-                                                                     kCFAllocatorDefault,
-                                                                     (CFStringRef)input,
-                                                                     (CFStringRef)@"!$&'()*+,-./:;=?@_~#[]",
-                                                                     NULL,
-                                                                     kCFStringEncodingGB_18030_2000));
-}
-//
-//- (NSString *)stringGBK:(NSString *)input
-//{
-//    return CFBridgingRelease(CFURLCreateStringByReplacingPercentEscapesUsingEncoding(
-//                                                                                     kCFAllocatorDefault,
-//                                                                                     
-//                                                                                     (CFStringRef)input,
-//                                                                                     
-//                                                                                     (CFStringRef)@"!$&'()*+,-./:;=?@_~%#[]",
-//                                                                                     
-//                                                                                     kCFStringEncodingGB_2312_80));
-//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    NSString *a = @"入金";
-    NSString *s =[self gbkString:a];
-    NSLog(@"%@",s);
-    NSString *ss =[self gbkString:s];
-    NSLog(@"%@",ss);
-//    NSLog(@"%@",[self stringGBK:@"%25C8%25EB%25BD%25F0"]);
-//    NSLog(@"%@",[self stringGBK:[self stringGBK:@"%25C8%25EB%25BD%25F0"]]);
-}
+    
     //--------------------1
 //    RACSignal *signal = @[@1,@2,@3,@4,@5,@6,@7,@8,@9].rac_sequence.signal;
 //    [signal subscribeNext:^(id x) {//创建定时器依次打印
@@ -129,43 +107,46 @@
 //    }];
 
     //-----------------4
-//    RACSubject *letters = [RACSubject subject];
-//    RACSubject *numbers = [RACSubject subject];
-//    RACSignal *signalOfSignals = [RACSignal createSignal:^ RACDisposable * (id<RACSubscriber> subscriber) {
-//        [subscriber sendNext:letters];//sendNext就是执行nextBlock
-//        [subscriber sendNext:numbers];
-//        [subscriber sendCompleted];
-//        return nil;
-//    }];
-//  
-//    [letters subscribeNext:^(id x) {
-//        NSLog(@"letters--1//%@", x);
-//    }];
-//    [letters subscribeNext:^(id x) {//RACSubject可以有多个订阅者
-//        NSLog(@"letters--2//%@", x);
-//    }];
-//    [numbers subscribeNext:^(id x) {
-//        NSLog(@"numbers//%@", x);
-//    }];
-//    
-//    [signalOfSignals subscribeNext:^(NSString *x) {//未打平
-//        NSLog(@"%@", x);
-//    }];
-//    [signalOfSignals subscribeNext:^(id x) {//RACSignal同一时间只有一个订阅者
-//        NSLog(@"RACSignal同一时间只有一个订阅者//%@",x);
-//    }];
-//    RACSignal *flattened = [signalOfSignals flatten];
-//    
-//    // Outputs: A 1 B C 2
-//    [flattened subscribeNext:^(NSString *x) {
-//        NSLog(@"%@", x);
-//    }];
-//    
-//    [letters sendNext:@"A"];//RACSubject同一时间可以有多个订阅者， sendNext会执行所有订阅者的nextBlock
-//    [numbers sendNext:@"1"];
-//    [letters sendNext:@"B"];
-//    [letters sendNext:@"C"];
-//    [numbers sendNext:@"2"];
+    RACSubject *letters = [RACSubject subject];
+    RACSubject *numbers = [RACSubject subject];
+    RACSignal *signalOfSignals = [RACSignal createSignal:^ RACDisposable * (id<RACSubscriber> subscriber) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [subscriber sendNext:letters];//sendNext就是执行nextBlock
+            [subscriber sendNext:numbers];
+            [subscriber sendCompleted];
+    
+        });
+                return nil;
+    }];
+  
+    [letters subscribeNext:^(id x) {
+        NSLog(@"letters--1//%@", x);
+    }];
+    [letters subscribeNext:^(id x) {//RACSubject可以有多个订阅者
+        NSLog(@"letters--2//%@", x);
+    }];
+    [numbers subscribeNext:^(id x) {
+        NSLog(@"numbers//%@", x);
+    }];
+    
+    [signalOfSignals subscribeNext:^(NSString *x) {//未打平
+        NSLog(@"%@", x);
+    }];
+    [signalOfSignals subscribeNext:^(id x) {//RACSignal会向每一个订阅者分别发送完整的消息
+        NSLog(@"RACSignal同一时间只有一个订阅者//%@",x);
+    }];
+    RACSignal *flattened = [signalOfSignals flatten];
+    
+    // Outputs: A 1 B C 2
+    [flattened subscribeNext:^(NSString *x) {
+        NSLog(@"%@", x);
+    }];
+    
+    [letters sendNext:@"A"];//RACSubject同一时间可以有多个订阅者， sendNext会执行所有订阅者的nextBlock
+    [numbers sendNext:@"1"];
+    [letters sendNext:@"B"];
+    [letters sendNext:@"C"];
+    [numbers sendNext:@"2"];
     
     //--------------5
 //    RACSequence *numbers = [@"1 2 3 4 5 6 7 8 9" componentsSeparatedByString:@" "].rac_sequence;
@@ -287,44 +268,43 @@
 //    [letters sendNext:@"C"];
 //    [numbers sendNext:@"3"];
     
-    //-----------------大大的问号？？？？？？？？？？？？？？？？
+    //switchToLatest 每次都会监听最近的sendNext的信号。
 //    RACSubject *letters = [RACSubject subject];
+//    NSLog(@"--------------------1");
 //    RACSubject *numbers = [RACSubject subject];
+//    NSLog(@"--------------------2");
 //    RACSubject *signalOfSignals = [RACSubject subject];
+//    NSLog(@"--------------------3");
 //    
-//    RACSignal *switched = [signalOfSignals switchToLatest];
-//    
+//    RACSignal *switched = [signalOfSignals switchToLatest];// takeUntil:signal
+//    NSLog(@"--------------------4");
 //    // Outputs: A B 1 D
 //    [switched subscribeNext:^(NSString *x) {
 //        NSLog(@"%@", x);
 //    }];
+//    NSLog(@"--------------------5");
 //    
 //    [signalOfSignals sendNext:letters];
+//    NSLog(@"--------------------6");
 //    [letters sendNext:@"A"];
+//    NSLog(@"--------------------7");
 //    [letters sendNext:@"B"];
+//    NSLog(@"--------------------8");
 //    
 //    [signalOfSignals sendNext:numbers];
+//    NSLog(@"--------------------9");
 //    [letters sendNext:@"C"];
+//    NSLog(@"--------------------10");
 //    [letters sendNext:@"C"];
+//    NSLog(@"--------------------11");
 //    [numbers sendNext:@"1"];
+//    NSLog(@"--------------------12");
 //    
 //    [signalOfSignals sendNext:letters];
+//    NSLog(@"--------------------13");
 //    [numbers sendNext:@"2"];
+//    NSLog(@"--------------------14");
 //    [letters sendNext:@"D"];
-    
-    //    BNRNegativeArray *arr = [[BNRNegativeArray alloc] init];
-    //    arr[0] = @"wew";
-    //    arr[0] = @"hi";     // insert
-    //    arr[1] = @"ohai";   // insert
-    //    arr[0] = @"obai";   // change
-    //    arr[10] = @"end!";  // null-fill and insert
-    //    NSMutableString *str = [NSMutableString stringWithString:@"eeee"];
-    //    arr = @"3333232",
-    //    NSLog (@"negatory: %@-%@", arr, arr[0]);
-    //
-    //    BNRDiggyDict *dauchs = [[BNRDiggyDict alloc] init];
-    //    dauchs[@"i can has"] = @"cheezburger";
-    //    NSLog (@"badger: %@", dauchs);
     
     //
     //    RACSignal *signalInterval = [[RACSignal interval:1.0 onScheduler:[RACScheduler mainThreadScheduler]] take:3];
@@ -772,13 +752,40 @@
     //        NSLog(@"%@", x);
     //    }];
     //
-//    @weakify(self);
+    
+//    __block NSInteger count = 0;
+//
 //    self.resetBtn.rac_command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
-//        @strongify(self);
-//        [self resetClick];
+//        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//            if (count++ % 2) {
+//                [subscriber sendNext:@"1111"];
+//                [subscriber sendCompleted];
+//            } else
+//            [subscriber sendError:nil];
+//            return nil;
+//        }];
+//    }];
+    
+//    NSURL* url = [NSURL URLWithString:@"http://www.jianshu.com"];
+//    RACSignal* getDataSignal = [NSData rac_readContentsOfURL:url options:NSDataReadingUncached
+//                                                   scheduler:[RACScheduler mainThreadScheduler]];
+//    [getDataSignal subscribeNext:^(id x) {
+//        NSLog(@"%@",x);  //这里的x就是NSData数据
+//    }];
+    
+//    self.resetBtn.rac_command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
 //        return [RACSignal empty];
 //    }];
 //    
+//    [[self.resetBtn.rac_command.executionSignals switchToLatest] subscribeNext:^(id x) {
+//        NSLog(@"---------------------%@",x);
+//    }];
+//    [self.resetBtn.rac_command.executing subscribeNext:^(id x) {
+//        NSLog(@"---------------------%@",x);
+//    }];
+//    [self.resetBtn.rac_command.errors subscribeNext:^(id x) {
+//        NSLog(@"---------------------==");
+//    }];
 //    [[self fetchColdSignal] subscribeNext:^(id x) {
 //        
 //    } error:^(NSError *error) {
@@ -787,110 +794,111 @@
 //        
 //    }];
 
-//}
+}
 
-//- (void)resetClick
-//{
-//    [[self fetchUserInfo] subscribeNext:^(id x) {
-//        NSLog(@"next//%@",x);
-//    } error:^(NSError *error) {
-//        NSLog(@"error//%@",@(error.code));
-//    } completed:^{
-//        NSLog(@"completed");
-//    }];
-//}
-//
-//- (RACSignal *)fetchUserInfo
-//{
-//    RACSubject *subject = [RACSubject subject];
-//    NSDictionary *params = @{
-//                             @"token":@"rO0ABXQAMcOWwq5xIiLCmkTAgFVzw7IswqHDhcOaw4lDecKgw7A0wp1Uw4rDpFzDqzE/w7XDkhE="
-//                             };
-//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-//    
-//    [manager GET:@"http://test.dx.device.baidao.com/jry-device/dx/ajax/user/getUserByToken" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-//        [subject sendNext:@"1"];
-//        [subject sendCompleted];
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        [subject sendError:error];
-//    }];
-//    return subject;
-//}
-//
-//- (RACSignal *)fetchColdSignal
-//{
-//    RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-//        [subscriber sendNext:@1];
-//        [subscriber sendNext:@2];
-//        [subscriber sendNext:@3];
-//        [subscriber sendCompleted];
-//        return [RACDisposable disposableWithBlock:^{
-//            NSLog(@"/////");
-//        }];
-//    }];
-//    return signal;
-//}
-//
-//- (void)didReceiveMemoryWarning {
-//    [super didReceiveMemoryWarning];
-//    // Dispose of any resources that can be recreated.
-//}
-//
-//#pragma mark - touch id
-//- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
-//{
+- (void)resetClick
+{
+    [[self fetchUserInfo] subscribeNext:^(id x) {
+        NSLog(@"next//%@",x);
+    } error:^(NSError *error) {
+        NSLog(@"error//%@",@(error.code));
+    } completed:^{
+        NSLog(@"completed");
+    }];
+}
+
+- (RACSignal *)fetchUserInfo
+{
+    RACSubject *subject = [RACSubject subject];
+    NSDictionary *params = @{
+                             @"token":@"rO0ABXQAMcOWwq5xIiLCmkTAgFVzw7IswqHDhcOaw4lDecKgw7A0wp1Uw4rDpFzDqzE/w7XDkhE="
+                             };
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    [manager GET:@"http://test.dx.device.baidao.com/jry-device/dx/ajax/user/getUserByToken" parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        [subject sendNext:@"1"];
+        [subject sendCompleted];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [subject sendError:error];
+    }];
+    return subject;
+}
+
+- (RACSignal *)fetchColdSignal
+{
+    RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [subscriber sendNext:@1];
+        [subscriber sendNext:@2];
+        [subscriber sendNext:@3];
+        [subscriber sendCompleted];
+        return [RACDisposable disposableWithBlock:^{
+            NSLog(@"/////");
+        }];
+    }];
+    return signal;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - touch id
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
 //    if ([identifier isEqualToString:@"touch id push"]) {
 //        [self handleTouchId];
 //        return NO;
 //    }
-//    return YES;
-//}
-//
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-//{
-//    
-//}
-//
-//- (void)handleTouchId
-//{
-//    double version = [[UIDevice currentDevice].systemVersion doubleValue];
-//    if (version < 8.0) {
-//        return;
-//    }
-//    LAContext *laContent = [[LAContext alloc] init];
-//    NSError *error;
-//    if ([laContent canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-//        [laContent evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"Touch ID Test" reply:^(BOOL success, NSError * _Nullable error) {
-//            if (success) {
-//                NSLog(@"sucess//");
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [self performSegueWithIdentifier:@"touch id push" sender:self];
-//                });
-//            }
-//            if (error) {
-//                NSLog(@"error//%@",error);
-//                switch (error.code) {
-//                    case LAErrorAppCancel:
-//                    case LAErrorUserCancel:
-//                    case LAErrorUserFallback:
-//                    case LAErrorSystemCancel:
-//                    case LAErrorInvalidContext:
-//                    case LAErrorPasscodeNotSet:
-//                    case LAErrorTouchIDLockout:
-//                    case LAErrorTouchIDNotEnrolled:
-//                    case LAErrorTouchIDNotAvailable:
-//                    case LAErrorAuthenticationFailed:
-//                        break;
-//                        
-//                    default:
-//                        break;
-//                }
-//                
-//            }
-//        }];
-//    } else {
-//        NSLog(@"error//%@",error);
-//    }
-//}
+    return YES;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    
+}
+
+- (void)handleTouchId
+{
+    double version = [[UIDevice currentDevice].systemVersion doubleValue];
+    if (version < 8.0) {
+        return;
+    }
+    LAContext *laContent = [[LAContext alloc] init];
+    NSError *error;
+    if ([laContent canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+        [laContent evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"Touch ID Test" reply:^(BOOL success, NSError * _Nullable error) {
+            if (success) {
+                NSLog(@"sucess//");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self performSegueWithIdentifier:@"touch id push" sender:self];
+                });
+            }
+            if (error) {
+                NSLog(@"error//%@",error);
+                switch (error.code) {
+                    case LAErrorAppCancel:
+                    case LAErrorUserCancel:
+                    case LAErrorUserFallback:
+                    case LAErrorSystemCancel:
+                    case LAErrorInvalidContext:
+                    case LAErrorPasscodeNotSet:
+                    case LAErrorTouchIDLockout:
+                    case LAErrorTouchIDNotEnrolled:
+                    case LAErrorTouchIDNotAvailable:
+                    case LAErrorAuthenticationFailed:
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
+            }
+        }];
+    } else {
+        NSLog(@"error//%@",error);
+    }
+}
+
 
 @end
