@@ -20,11 +20,19 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - OpenCV (2.4.6)
+  - Tesseract (0.0.1)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.6.3)
+  - OpenCV
+  - Tesseract
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  OpenCV: 3083f3f877f2a7b0c59383d5bba5088d339993df
+  Tesseract: 4ab1d5c81d72fca8830c28bfcc80aba9f82455b0
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 4b0c28dc0574be6a24578351ee8b382419a6d344
+
+COCOAPODS: 1.0.1

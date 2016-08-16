@@ -1,0 +1,19 @@
+//
+//  RACTestO-prefix.pch
+//  RACTestO
+//
+//  Created by zhanglu on 16/8/15.
+//  Copyright © 2016年 zhanglu. All rights reserved.
+//
+
+#ifndef RACTestO_prefix_pch
+#define RACTestO_prefix_pch
+#ifdef __cplusplus
+#import <opencv2/opencv.hpp>
+//#import <Opencv2/opencv.hpp>
+#include "baseapi.h"
+#endif
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* RACTestO_prefix_pch */

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="uPn-IY-bzd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="uPn-IY-bzd">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -69,6 +69,12 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="有彩蛋" id="RMy-ac-Sw8">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="Y4K-KZ-XZl">
+                            <connections>
+                                <action selector="beginOCRAction:" destination="BYZ-38-t0r" id="F2Y-0R-zYR"/>
+                                <segue destination="efS-aX-pNO" kind="show" id="ldc-MV-XZz"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Touch ID" id="Zde-SS-xzF">
                             <connections>
                                 <segue destination="uUh-im-xYw" kind="show" identifier="touch id push" id="FHj-if-QbV"/>
@@ -82,6 +88,86 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="158" y="314"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="pbF-tO-h2V">
+            <objects>
+                <navigationController id="qMk-8F-FJI" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="o74-r6-pAq">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="efS-aX-pNO" kind="relationship" relationship="rootViewController" id="7yp-6O-RZI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DDd-vU-8Nc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-973" y="1004"/>
+        </scene>
+        <!--连连看-->
+        <scene sceneID="4MA-DM-BMU">
+            <objects>
+                <viewController id="efS-aX-pNO" customClass="OCRViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BNH-ZN-AIa"/>
+                        <viewControllerLayoutGuide type="bottom" id="JrC-za-EbT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eZR-07-34t">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="er9-PS-B2a">
+                                <rect key="frame" x="0.0" y="64" width="600" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="Shl-gq-aKN"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ids-aE-k7y">
+                                <rect key="frame" x="0.0" y="64" width="600" height="200"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="S0y-sL-dqb"/>
+                                </constraints>
+                                <state key="normal" title="拿照片"/>
+                                <connections>
+                                    <action selector="takePhotoAction:" destination="efS-aX-pNO" eventType="touchUpInside" id="5qT-8x-CWs"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hAM-Nz-CWi">
+                                <rect key="frame" x="20" y="284" width="100" height="44"/>
+                                <color key="backgroundColor" red="0.98823529409999999" green="0.21176470589999999" blue="0.16078431369999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="6xm-0N-b4l"/>
+                                    <constraint firstAttribute="width" constant="100" id="ah9-Ly-3MH"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="readPhoto:" destination="efS-aX-pNO" eventType="touchUpInside" id="Ybn-p5-Wl5"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="er9-PS-B2a" secondAttribute="trailing" id="0TT-ND-Xkf"/>
+                            <constraint firstItem="hAM-Nz-CWi" firstAttribute="leading" secondItem="eZR-07-34t" secondAttribute="leading" constant="20" id="4mv-GG-CkV"/>
+                            <constraint firstAttribute="trailing" secondItem="Ids-aE-k7y" secondAttribute="trailing" id="61t-cQ-XCz"/>
+                            <constraint firstItem="er9-PS-B2a" firstAttribute="top" secondItem="BNH-ZN-AIa" secondAttribute="bottom" id="7N5-C0-faX"/>
+                            <constraint firstItem="Ids-aE-k7y" firstAttribute="leading" secondItem="eZR-07-34t" secondAttribute="leading" id="LvW-vd-46Y"/>
+                            <constraint firstItem="hAM-Nz-CWi" firstAttribute="top" secondItem="Ids-aE-k7y" secondAttribute="bottom" constant="20" id="bpk-uV-2Kt"/>
+                            <constraint firstItem="er9-PS-B2a" firstAttribute="leading" secondItem="eZR-07-34t" secondAttribute="leading" id="w0j-i9-iey"/>
+                            <constraint firstItem="Ids-aE-k7y" firstAttribute="top" secondItem="BNH-ZN-AIa" secondAttribute="bottom" id="x02-uY-0Bb"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="连连看" id="3qH-EB-Z82"/>
+                    <connections>
+                        <outlet property="playImageView" destination="er9-PS-B2a" id="zY9-DP-VUp"/>
+                        <outlet property="selectedPhotoBtn" destination="Ids-aE-k7y" id="q34-xD-ctW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2o7-ND-ojL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="158" y="1011"/>
         </scene>
         <!--彩蛋-->
         <scene sceneID="wo0-1j-lbG">
@@ -143,5 +229,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="FHj-if-QbV"/>
+        <segue reference="7yp-6O-RZI"/>
     </inferredMetricsTieBreakers>
 </document>
